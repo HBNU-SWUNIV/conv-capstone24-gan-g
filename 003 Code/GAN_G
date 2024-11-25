@@ -18,7 +18,7 @@ pip install tqdm_joblib
 folder_path = "/Users/naekyung/Desktop/A/00321804(0002)"
 csv_files = glob.glob(os.path.join(folder_path, '*.csv'))
 
-required_features = ['rack_no', 'module_no'] + [f'cel_volt_{i:02}' for i in range(1, 15)]
+required_features = ['name1', 'name2'] + [f'name{i:02}' for i in range(1, 15)]
 
 results = {}
 
@@ -111,75 +111,7 @@ file_path = "/Users/naekyung/Desktop/blind_test/A_2.csv"
 # CSV 파일 읽기
 blind_test_df = pd.read_csv(file_path)
 
-# `bsc_fg_no` 값이 1인 데이터 추출
-bsc_fg_no_1 = blind_test_df[blind_test_df['bsc_fg_no'] == 1].reset_index(drop=True)
-
-# 필요한 Feature 리스트
-required_features =[f'cel_volt_{i:02}' for i in range(1, 15)]
-
-# 필요한 Feature만 남기기
-bsc_fg_no_1 = bsc_fg_no_1[required_features]
-
-# 1440개씩 분할
-chunk_size = 1440
-
-split_dfs_1 = [bsc_fg_no_1.iloc[i * chunk_size:(i + 1) * chunk_size].reset_index(drop=True)
-               for i in range(bsc_fg_no_1.shape[0] // chunk_size)]
-
-# 각 분할 데이터프레임 열 이름 변경 (중복 방지)
-for idx, df in enumerate(split_dfs_1):
-    df.columns = [f"{col}_bsc1_{idx+1}" for col in df.columns]
-
-# 가로 병합
-combined_df_1 = pd.concat(split_dfs_1, axis=1)
-
-# 결과 확인
-print("bsc_fg_no=1 데이터 처리 결과:")
-print(combined_df_1)
-
-# 저장 (옵션)
-combined_df_1.to_csv("combined_bsc_fg_no_1.csv", index=False, encoding="utf-8-sig")
-print("bsc_fg_no=1 데이터가 'combined_bsc_fg_no_1.csv'로 저장되었습니다.")
-
-import pandas as pd
-
-# 경로 설정
-file_path = "/Users/naekyung/Desktop/blind_test/A_2.csv"
-
-# CSV 파일 읽기
-blind_test_df = pd.read_csv(file_path)
-
-# `bsc_fg_no` 값이 2인 데이터 추출
-bsc_fg_no_2 = blind_test_df[blind_test_df['bsc_fg_no'] == 2].reset_index(drop=True)
-
-# 필요한 Feature 리스트
-required_features = [f'cel_volt_{i:02}' for i in range(1, 15)]
-
-# 필요한 Feature만 남기기
-bsc_fg_no_2 = bsc_fg_no_2[required_features]
-
-# 1440개씩 분할
-chunk_size = 1440
-
-split_dfs_2 = [bsc_fg_no_2.iloc[i * chunk_size:(i + 1) * chunk_size].reset_index(drop=True)
-               for i in range(bsc_fg_no_2.shape[0] // chunk_size)]
-
-# 각 분할 데이터프레임 열 이름 변경 (중복 방지)
-for idx, df in enumerate(split_dfs_2):
-    df.columns = [f"{col}_bsc2_{idx+1}" for col in df.columns]
-
-# 가로 병합
-combined_df_2 = pd.concat(split_dfs_2, axis=1)
-
-# 결과 확인
-print("bsc_fg_no=2 데이터 처리 결과:")
-print(combined_df_2)
-
-# 저장 (옵션)
-combined_df_2.to_csv("combined_bsc_fg_no_2.csv", index=False, encoding="utf-8-sig")
-print("bsc_fg_no=2 데이터가 'combined_bsc_fg_no_2.csv'로 저장되었습니다.")
-
-import pandas as pd
+# blind 데이터 전처리 하는 부분 (기밀 생략)
 
 # 두 데이터프레임 로드
 combined_df_1 = pd.read_csv("combined_bsc_fg_no_1.csv")  # bsc_fg_no=1 결과
